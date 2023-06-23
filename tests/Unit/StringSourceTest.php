@@ -6,7 +6,7 @@ namespace Graphpinator\Tests\Unit;
 
 final class StringSourceTest extends \PHPUnit\Framework\TestCase
 {
-    public function simpleDataProvider() : array
+    public static function simpleDataProvider() : array
     {
         return [
             ['987123456', ['9','8','7','1','2','3','4','5','6']],
