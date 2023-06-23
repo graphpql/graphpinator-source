@@ -6,8 +6,6 @@ namespace Graphpinator\Source;
 
 final class StringSource implements \Graphpinator\Source\Source
 {
-    use \Nette\SmartObject;
-
     private array $characters;
     private int $numberOfChars;
     private int $currentIndex;
