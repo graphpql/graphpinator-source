@@ -12,7 +12,7 @@ final class UnexpectedEnd extends \Graphpinator\Exception\GraphpinatorBase
     {
         parent::__construct();
 
-        $this->location = $location;
+        $this->setLocation($location);
     }
 
     public function isOutputable() : bool
