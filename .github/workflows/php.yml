@@ -128,5 +128,5 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --no-suggest
 
-      - name: Codestyle
+      - name: Dependencies
         run: composer run-script dependencies
