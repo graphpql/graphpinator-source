@@ -4,7 +4,11 @@ declare(strict_types = 1);
 
 namespace Graphpinator\Tests\Unit;
 
-final class StringSourceTest extends \PHPUnit\Framework\TestCase
+use Graphpinator\Source\Exception\UnexpectedEnd;
+use Graphpinator\Source\StringSource;
+use PHPUnit\Framework\TestCase;
+
+final class StringSourceTest extends TestCase
 {
     public static function simpleDataProvider() : array
     {
@@ -22,7 +26,7 @@ final class StringSourceTest extends \PHPUnit\Framework\TestCase
      */
     public function testSimple(string $source, array $chars) : void
     {
-        $source = new \Graphpinator\Source\StringSource($source);
+        $source = new StringSource($source);
 
         self::assertSame(\count($chars), $source->getNumberOfChars());
 
@@ -42,7 +46,7 @@ final class StringSourceTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitialization(string $source) : void
     {
-        $source = new \Graphpinator\Source\StringSource($source);
+        $source = new StringSource($source);
 
         self::assertTrue($source->valid());
         self::assertSame(0, $source->key());
@@ -50,10 +54,10 @@ final class StringSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testInvalid() : void
     {
-        $this->expectException(\Graphpinator\Source\Exception\UnexpectedEnd::class);
-        $this->expectExceptionMessage(\Graphpinator\Source\Exception\UnexpectedEnd::MESSAGE);
+        $this->expectException(UnexpectedEnd::class);
+        $this->expectExceptionMessage(UnexpectedEnd::MESSAGE);
 
-        $source = new \Graphpinator\Source\StringSource('123');
+        $source = new StringSource('123');
 
         $source->next();
         $source->next();
@@ -63,7 +67,7 @@ final class StringSourceTest extends \PHPUnit\Framework\TestCase
 
     public function testLocation() : void
     {
-        $source = new \Graphpinator\Source\StringSource('abcd' . \PHP_EOL . 'abcde' . \PHP_EOL . \PHP_EOL . \PHP_EOL . 'abc');
+        $source = new StringSource('abcd' . \PHP_EOL . 'abcde' . \PHP_EOL . \PHP_EOL . \PHP_EOL . 'abc');
         $lines = [1 => 5, 6, 1, 1, 3];
 
         for ($line = 1; $line <= 5; ++$line) {

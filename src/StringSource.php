@@ -4,38 +4,47 @@ declare(strict_types = 1);
 
 namespace Graphpinator\Source;
 
-final class StringSource implements \Graphpinator\Source\Source
+use Graphpinator\Common\Location;
+use Graphpinator\Source\Exception\UnexpectedEnd;
+
+final class StringSource implements Source
 {
+    /** @var list<string> */
     private array $characters;
     private int $numberOfChars;
     private int $currentIndex;
     private int $currentLine;
     private int $currentColumn;
 
-    public function __construct(string $source)
+    public function __construct(
+        string $source,
+    )
     {
-        $this->characters = \preg_split('//u', $source, -1, \PREG_SPLIT_NO_EMPTY);
+        $this->characters = \preg_split('//u', $source, -1, \PREG_SPLIT_NO_EMPTY) ?: [];
         $this->numberOfChars = \count($this->characters);
         $this->rewind();
     }
 
+    #[\Override]
     public function hasChar() : bool
     {
         return \array_key_exists($this->currentIndex, $this->characters);
     }
 
+    #[\Override]
     public function getChar() : string
     {
         if ($this->hasChar()) {
             return $this->characters[$this->currentIndex];
         }
 
-        throw new \Graphpinator\Source\Exception\UnexpectedEnd($this->getLocation());
+        throw new UnexpectedEnd($this->getLocation());
     }
 
-    public function getLocation() : \Graphpinator\Common\Location
+    #[\Override]
+    public function getLocation() : Location
     {
-        return new \Graphpinator\Common\Location($this->currentLine, $this->currentColumn);
+        return new Location($this->currentLine, $this->currentColumn);
     }
 
     public function getNumberOfChars() : int
@@ -43,16 +52,19 @@ final class StringSource implements \Graphpinator\Source\Source
         return $this->numberOfChars;
     }
 
+    #[\Override]
     public function current() : string
     {
         return $this->getChar();
     }
 
+    #[\Override]
     public function key() : int
     {
         return $this->currentIndex;
     }
 
+    #[\Override]
     public function next() : void
     {
         if ($this->getChar() === \PHP_EOL) {
@@ -65,11 +77,13 @@ final class StringSource implements \Graphpinator\Source\Source
         ++$this->currentIndex;
     }
 
+    #[\Override]
     public function valid() : bool
     {
         return $this->hasChar();
     }
 
+    #[\Override]
     public function rewind() : void
     {
         $this->currentIndex = 0;
