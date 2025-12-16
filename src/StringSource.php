@@ -20,7 +20,7 @@ final class StringSource implements Source
         string $source,
     )
     {
-        $this->characters = \preg_split('//u', $source, -1, \PREG_SPLIT_NO_EMPTY) ?: [];
+        $this->characters = \preg_split('//u', $source, -1, \PREG_SPLIT_NO_EMPTY) ?: []; // @phpstan-ignore theCodingMachineSafe.function,ternary.shortNotAllowed
         $this->numberOfChars = \count($this->characters);
         $this->rewind();
     }
